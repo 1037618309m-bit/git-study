@@ -4,3 +4,4 @@
 *.tmp
 # 环境配置、密钥
 .env
+minikube-linux-amd64
