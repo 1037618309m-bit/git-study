@@ -1,0 +1,15 @@
+- hosts: webservers
+  become: yes
+  tasks:
+    - name: 创建测试配置文件
+      copy:
+        dest: /tmp/test.conf
+        content: "配置改了\n"
+      notify: 重启服务
+
+  handlers:
+    - name: 重启服务
+      service:
+        name: nginx
+        state: restarted
+

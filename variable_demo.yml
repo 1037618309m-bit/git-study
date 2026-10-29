@@ -1,0 +1,9 @@
+- hosts: webservers
+  vars:
+    app_name: "我的测试应用"
+    version: "v1.0"
+  tasks:
+    - name: 打印变量
+      debug:
+        msg: "应用名：{{ app_name }}，版本：{{ version }}"
+

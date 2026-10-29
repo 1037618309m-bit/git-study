@@ -1,0 +1,8 @@
+- hosts: webservers
+  become: yes
+  tasks:
+    - name: 创建一个测试文件
+      copy:
+        dest: /tmp/test.txt
+        content: "这是Ansible自动创建的文件\n"
+

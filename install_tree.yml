@@ -1,0 +1,8 @@
+- hosts: webservers
+  become: yes
+  tasks:
+    - name: 安装tree命令
+      dnf:
+        name: tree
+        state: present
+

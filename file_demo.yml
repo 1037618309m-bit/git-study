@@ -1,0 +1,20 @@
+- hosts: webservers
+  become: yes
+  tasks:
+    - name: 创建一个目录
+      file:
+        path: /tmp/testdir
+        state: directory
+
+    - name: 在目录里创建一个文件
+      file:
+        path: /tmp/testdir/test.txt
+        state: touch
+
+    - name: 改文件所有者
+      file:
+        path: /tmp/testdir/test.txt
+        owner: mino
+        group: mino
+        mode: "0644"
+

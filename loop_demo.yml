@@ -1,0 +1,13 @@
+- hosts: webservers
+  become: yes
+  tasks:
+    - name: 批量安装多个软件
+      dnf:
+        name: "{{ item }}"
+        state: present
+      loop:
+        - vim
+        - wget
+        - curl
+        - net-tools
+

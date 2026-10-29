@@ -1,0 +1,17 @@
+- hosts: webservers
+  become: yes
+  vars:
+    server_name: "test.example.com"
+  tasks:
+    - name: 用模板生成Nginx配置
+      template:
+        src: ~/nginx.conf.j2
+        dest: /tmp/nginx.conf
+      notify: 重启nginx
+
+  handlers:
+    - name: 重启nginx
+      service:
+        name: nginx
+        state: restarted
+

@@ -1,0 +1,13 @@
+- hosts: webservers
+  become: yes
+  tasks:
+    - name: 看一下系统版本
+      debug:
+        msg: "操作系统是 {{ ansible_distribution }}"
+
+    - name: 如果是Rocky就装vim
+      dnf:
+        name: vim
+        state: present
+      when: ansible_distribution == "Rocky"
+
