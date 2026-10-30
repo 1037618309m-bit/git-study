@@ -1,0 +1,17 @@
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: test-daemonset
+spec:
+  selector:
+    matchLabels:
+      name: test-daemonset
+  template:
+    metadata:
+      labels:
+        name: test-daemonset
+    spec:
+      containers:
+        - name: test
+          image: nginx
+
