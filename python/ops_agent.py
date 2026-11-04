@@ -22,8 +22,8 @@ for line in lines:
         error_lines.append(line)
 
 if len(error_lines) == 0:
-    print("✅ 日志正常，没有ERROR")
-    exit()
+    print("日志没有ERROR，继续检查磁盘...")
+
 
 print(f"发现{len(error_lines)}条ERROR：")
 for e in error_lines:
@@ -36,6 +36,15 @@ print("\n第二步：采集服务器信息...")
 disk = subprocess.run(["df", "-h"], capture_output=True, text=True).stdout
 print(f"磁盘使用情况：\n{disk}")
 
+# 解析根分区（/）使用率
+disk_used_percent = 0
+for line in disk.split("\n"):
+    if line.strip().endswith(" /"):
+        parts = line.split()
+        disk_used_percent = int(parts[4].replace("%", ""))
+print(f"根分区使用率：{disk_used_percent}%")
+
+
 # 采集内存使用情况
 memory = subprocess.run(["free", "-h"], capture_output=True, text=True).stdout
 print(f"内存使用情况：\n{memory}")
@@ -43,6 +52,13 @@ print(f"内存使用情况：\n{memory}")
 # 采集CPU使用情况
 cpu = subprocess.run(["top", "-bn1"], capture_output=True, text=True).stdout.split("\n")[2]
 print(f"CPU使用情况：\n{cpu}")
+
+# 报警条件：有ERROR 或 磁盘使用率超过85%
+if len(error_lines) == 0 and disk_used_percent <= 85:
+    print(f"✅ 一切正常：无ERROR，磁盘{disk_used_percent}%低于阈值85%，不报警")
+    exit()
+print("⚠️ 触发告警条件，继续分析...")
+
 
 
 # 第三步：调用大模型分析
