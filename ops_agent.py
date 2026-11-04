@@ -39,6 +39,11 @@ print(f"磁盘使用情况：\n{disk}")
 memory = subprocess.run(["free", "-h"], capture_output=True, text=True).stdout
 print(f"内存使用情况：\n{memory}")
 
+# 采集CPU使用情况
+cpu = subprocess.run(["top", "-bn1"], capture_output=True, text=True).stdout.split("\n")[2]
+print(f"CPU使用情况：\n{cpu}")
+
+
 # 第三步：调用大模型分析
 print("\n第三步：调用大模型分析...")
 
@@ -55,6 +60,10 @@ prompt = f"""你是一个运维专家。下面是DWS数据库的报错日志和�
 【服务器内存情况】
 {memory}
 
+【服务器CPU情况】
+{cpu}
+
+
 请用大白话回答：
 1. 报错原因是什么？
 2. 具体怎么解决？（给出具体命令）
@@ -64,6 +73,9 @@ data = {
     "model": model_name,
     "prompt": prompt,
     "stream": False,
+    "think": False,
+    "think": False,
+
     "options": {
         "num_predict": 300
     }
@@ -72,6 +84,12 @@ data = {
 response = requests.post(ollama_url, json=data, timeout=120)
 result = response.json()
 ai_answer = result["response"]
+
+
+# 去掉<think>标签和思考过程（不管有没有</think>都能去掉）
+ai_answer = ai_answer.replace("<think>", "").replace("</think>", "")
+
+
 
 print(f"大模型分析结果：\n{ai_answer}")
 
@@ -85,6 +103,9 @@ content = f"""🚨 运维告警
 
 📊 服务器磁盘：
 {disk}
+
+📈 服务器CPU：
+{cpu}
 
 🧠 大模型分析：
 {ai_answer}
