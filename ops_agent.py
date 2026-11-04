@@ -11,7 +11,8 @@ model_name = "it-fde-qwen3:latest"
 
 # 第一步：读日志，挑ERROR行
 print("第一步：读日志挑ERROR...")
-with open("app.log", "r") as f:
+with open("/home/mino/git-study/app.log", "r") as f:
+
     lines = f.readlines()
 
 error_lines = []
